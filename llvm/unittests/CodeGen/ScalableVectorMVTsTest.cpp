@@ -194,4 +194,31 @@ TEST(ScalableVectorMVTsTest, SizeQueries) {
             nxv2i32.getSizeInBits());
 }
 
+TEST(ScalableVectorMVTsTest, BackendOnlyOpaqueTypes) {
+  LLVMContext Ctx;
+  MVT ScalarTy(MVT::f8e4m3);
+
+  EXPECT_TRUE(ScalarTy.isValid());
+  EXPECT_FALSE(ScalarTy.isInteger());
+  EXPECT_FALSE(ScalarTy.isFloatingPoint());
+  EXPECT_EQ(EVT(ScalarTy).getEVTString(), "f8e4m3");
+  EXPECT_EQ(EVT(ScalarTy).getTypeForEVT(Ctx), Type::getInt8Ty(Ctx));
+
+  MVT VecTy = MVT::getVectorVT(MVT::f8e4m3, 256);
+  EXPECT_EQ(VecTy, MVT::v256f8e4m3);
+  EXPECT_TRUE(VecTy.isVector());
+  EXPECT_FALSE(VecTy.isInteger());
+  EXPECT_FALSE(VecTy.isFloatingPoint());
+  EXPECT_EQ(VecTy.getVectorElementType(), MVT::f8e4m3);
+  EXPECT_EQ(EVT(VecTy).getEVTString(), "v256f8e4m3");
+
+  auto *IRTy = cast<VectorType>(EVT(VecTy).getTypeForEVT(Ctx));
+  EXPECT_EQ(IRTy->getElementCount(), ElementCount::getFixed(256));
+  EXPECT_EQ(IRTy->getElementType(), Type::getInt8Ty(Ctx));
+
+  EXPECT_EQ(MVT::getVectorVT(MVT::f4e2m1x2, 2), MVT::v2f4e2m1x2);
+  EXPECT_EQ(MVT::getVectorVT(MVT::hif8, 512), MVT::v512hif8);
+  EXPECT_EQ(MVT::getVectorVT(MVT::f8e8m0, 512), MVT::v512f8e8m0);
+}
+
 } // end anonymous namespace

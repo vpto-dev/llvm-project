@@ -171,6 +171,13 @@ std::string EVT::getEVTString() const {
       return "f" + utostr(getSizeInBits());
     llvm_unreachable("Invalid EVT!");
   case MVT::bf16:      return "bf16";
+  case MVT::f4e2m1x2:  return "f4e2m1x2";
+  case MVT::f4e1m2x2:  return "f4e1m2x2";
+  case MVT::hif4x2:    return "hif4x2";
+  case MVT::hif8:      return "hif8";
+  case MVT::f8e4m3:    return "f8e4m3";
+  case MVT::f8e5m2:    return "f8e5m2";
+  case MVT::f8e8m0:    return "f8e8m0";
   case MVT::ppcf128:   return "ppcf128";
   case MVT::isVoid:    return "isVoid";
   case MVT::Other:     return "ch";
@@ -208,6 +215,14 @@ Type *EVT::getTypeForEVT(LLVMContext &Context) const {
     return LLVMTy;
   case MVT::isVoid:  return Type::getVoidTy(Context);
   case MVT::x86mmx:  return Type::getX86_MMXTy(Context);
+  case MVT::f4e2m1x2:
+  case MVT::f4e1m2x2:
+  case MVT::hif4x2:
+  case MVT::hif8:
+  case MVT::f8e4m3:
+  case MVT::f8e5m2:
+  case MVT::f8e8m0:
+    return Type::getInt8Ty(Context);
   case MVT::aarch64svcount:
     return TargetExtType::get(Context, "aarch64.svcount");
   case MVT::x86amx:  return Type::getX86_AMXTy(Context);
@@ -302,4 +317,3 @@ void MVT::print(raw_ostream &OS) const {
   else
     OS << EVT(*this).getEVTString();
 }
-

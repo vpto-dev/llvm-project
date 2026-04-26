@@ -69,8 +69,17 @@ static void VTtoGetLLVMTyString(raw_ostream &OS, const Record *VT) {
       OS << "Type::getInt" << OutputVTSize << "Ty(Context)";
     else
       OS << "Type::getIntNTy(Context, " << OutputVTSize << ")";
-  } else
-    llvm_unreachable("Unhandled case");
+  } else {
+    // Backend-only opaque value types do not have a native LLVM IR spelling.
+    // Represent them with same-width integer storage types when an IR type is
+    // needed for generated helpers such as EVT::getTypeForEVT().
+    if ((isPowerOf2_64(OutputVTSize) && OutputVTSize >= 8 &&
+         OutputVTSize <= 128) ||
+        OutputVTSize == 1)
+      OS << "Type::getInt" << OutputVTSize << "Ty(Context)";
+    else
+      OS << "Type::getIntNTy(Context, " << OutputVTSize << ")";
+  }
 
   if (IsVector)
     OS << ", " << VT->getValueAsInt("nElem") << ")";
