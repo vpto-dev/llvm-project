@@ -231,6 +231,9 @@ namespace CallingConv {
     /// Used for AMD graphics targets.
     AMDGPU_Gfx = 100,
 
+    /// Used for Ascend/Bisheng SIMT entry functions.
+    SimtEntry = 109,
+
     /// Used for M68k interrupt routines.
     M68k_INTR = 101,
 
