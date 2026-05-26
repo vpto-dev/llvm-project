@@ -568,6 +568,13 @@ void TypePrinting::print(Type *Ty, raw_ostream &OS) {
   case Type::VoidTyID:      OS << "void"; return;
   case Type::HalfTyID:      OS << "half"; return;
   case Type::BFloatTyID:    OS << "bfloat"; return;
+  case Type::Float4E2M1x2TyID: OS << "float4e2m1x2"; return;
+  case Type::Float4E1M2x2TyID: OS << "float4e1m2x2"; return;
+  case Type::HiFloat4x2TyID: OS << "hifloat4x2"; return;
+  case Type::HiFloat8TyID:  OS << "hifloat8"; return;
+  case Type::Float8E4M3TyID: OS << "float8e4m3"; return;
+  case Type::Float8E5M2TyID: OS << "float8e5m2"; return;
+  case Type::Float8E8M0TyID: OS << "float8e8m0"; return;
   case Type::FloatTyID:     OS << "float"; return;
   case Type::DoubleTyID:    OS << "double"; return;
   case Type::X86_FP80TyID:  OS << "x86_fp80"; return;

@@ -813,6 +813,14 @@ Align DataLayout::getAlignment(Type *Ty, bool abi_or_pref) const {
   }
   case Type::IntegerTyID:
     return getIntegerAlignment(Ty->getIntegerBitWidth(), abi_or_pref);
+  case Type::Float4E2M1x2TyID:
+  case Type::Float4E1M2x2TyID:
+  case Type::HiFloat4x2TyID:
+  case Type::HiFloat8TyID:
+  case Type::Float8E4M3TyID:
+  case Type::Float8E5M2TyID:
+  case Type::Float8E8M0TyID:
+    return getIntegerAlignment(8, abi_or_pref);
   case Type::HalfTyID:
   case Type::BFloatTyID:
   case Type::FloatTyID:

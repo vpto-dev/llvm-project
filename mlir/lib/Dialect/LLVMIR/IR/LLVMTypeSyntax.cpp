@@ -34,6 +34,13 @@ static void dispatchPrint(AsmPrinter &printer, Type type) {
 static StringRef getTypeKeyword(Type type) {
   return TypeSwitch<Type, StringRef>(type)
       .Case<LLVMVoidType>([&](Type) { return "void"; })
+      .Case<LLVMFloat4E2M1x2Type>([&](Type) { return "float4e2m1x2"; })
+      .Case<LLVMFloat4E1M2x2Type>([&](Type) { return "float4e1m2x2"; })
+      .Case<LLVMHiFloat4x2Type>([&](Type) { return "hifloat4x2"; })
+      .Case<LLVMHiFloat8Type>([&](Type) { return "hifloat8"; })
+      .Case<LLVMFloat8E4M3Type>([&](Type) { return "float8e4m3"; })
+      .Case<LLVMFloat8E5M2Type>([&](Type) { return "float8e5m2"; })
+      .Case<LLVMFloat8E8M0Type>([&](Type) { return "float8e8m0"; })
       .Case<LLVMPPCFP128Type>([&](Type) { return "ppc_fp128"; })
       .Case<LLVMX86MMXType>([&](Type) { return "x86_mmx"; })
       .Case<LLVMTokenType>([&](Type) { return "token"; })

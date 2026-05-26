@@ -684,7 +684,10 @@ LLVMFixedVectorType::getChecked(function_ref<InFlightDiagnostic()> emitError,
 }
 
 bool LLVMFixedVectorType::isValidElementType(Type type) {
-  return llvm::isa<LLVMPointerType, LLVMPPCFP128Type>(type);
+  return llvm::isa<LLVMPointerType, LLVMPPCFP128Type, LLVMFloat4E2M1x2Type,
+                   LLVMFloat4E1M2x2Type, LLVMHiFloat4x2Type, LLVMHiFloat8Type,
+                   LLVMFloat8E4M3Type, LLVMFloat8E5M2Type, LLVMFloat8E8M0Type>(
+      type);
 }
 
 LogicalResult
@@ -765,6 +768,13 @@ bool mlir::LLVM::isCompatibleOuterType(Type type) {
   if (llvm::isa<
       BFloat16Type,
       Float16Type,
+      LLVMFloat4E2M1x2Type,
+      LLVMFloat4E1M2x2Type,
+      LLVMHiFloat4x2Type,
+      LLVMHiFloat8Type,
+      LLVMFloat8E4M3Type,
+      LLVMFloat8E5M2Type,
+      LLVMFloat8E8M0Type,
       Float32Type,
       Float64Type,
       Float80Type,
@@ -835,6 +845,13 @@ static bool isCompatibleImpl(Type type, DenseSet<Type> &compatibleTypes) {
           .Case<
             BFloat16Type,
             Float16Type,
+            LLVMFloat4E2M1x2Type,
+            LLVMFloat4E1M2x2Type,
+            LLVMHiFloat4x2Type,
+            LLVMHiFloat8Type,
+            LLVMFloat8E4M3Type,
+            LLVMFloat8E5M2Type,
+            LLVMFloat8E8M0Type,
             Float32Type,
             Float64Type,
             Float80Type,
@@ -870,7 +887,10 @@ bool mlir::LLVM::isCompatibleType(Type type) {
 
 bool mlir::LLVM::isCompatibleFloatingPointType(Type type) {
   return llvm::isa<BFloat16Type, Float16Type, Float32Type, Float64Type,
-                   Float80Type, Float128Type, LLVMPPCFP128Type>(type);
+                   Float80Type, Float128Type, LLVMFloat4E2M1x2Type,
+                   LLVMFloat4E1M2x2Type, LLVMHiFloat4x2Type, LLVMHiFloat8Type,
+                   LLVMFloat8E4M3Type, LLVMFloat8E5M2Type, LLVMFloat8E8M0Type,
+                   LLVMPPCFP128Type>(type);
 }
 
 bool mlir::LLVM::isCompatibleVectorType(Type type) {
@@ -884,7 +904,10 @@ bool mlir::LLVM::isCompatibleVectorType(Type type) {
     if (auto intType = llvm::dyn_cast<IntegerType>(elementType))
       return intType.isSignless();
     return llvm::isa<BFloat16Type, Float16Type, Float32Type, Float64Type,
-                     Float80Type, Float128Type>(elementType);
+                     Float80Type, Float128Type, LLVMFloat4E2M1x2Type,
+                     LLVMFloat4E1M2x2Type, LLVMHiFloat4x2Type, LLVMHiFloat8Type,
+                     LLVMFloat8E4M3Type, LLVMFloat8E5M2Type,
+                     LLVMFloat8E8M0Type>(elementType);
   }
   return false;
 }
