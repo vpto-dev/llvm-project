@@ -55,6 +55,13 @@ public:
     // PrimitiveTypes
     HalfTyID = 0,  ///< 16-bit floating point type
     BFloatTyID,    ///< 16-bit floating point type (7-bit significand)
+    Float4E2M1x2TyID, ///< 8-bit packed pair of float4e2m1 values
+    Float4E1M2x2TyID, ///< 8-bit packed pair of float4e1m2 values
+    HiFloat4x2TyID,   ///< 8-bit packed pair of hifloat4 values
+    HiFloat8TyID,     ///< 8-bit hifloat8 type
+    Float8E4M3TyID,   ///< 8-bit float8e4m3 type
+    Float8E5M2TyID,   ///< 8-bit float8e5m2 type
+    Float8E8M0TyID,   ///< 8-bit float8e8m0 type
     FloatTyID,     ///< 32-bit floating point type
     DoubleTyID,    ///< 64-bit floating point type
     X86_FP80TyID,  ///< 80-bit floating point type (X87)
@@ -144,6 +151,29 @@ public:
   /// Return true if this is 'bfloat', a 16-bit bfloat type.
   bool isBFloatTy() const { return getTypeID() == BFloatTyID; }
 
+  bool isFloat4E2M1x2Ty() const { return getTypeID() == Float4E2M1x2TyID; }
+  bool isFloat4E1M2x2Ty() const { return getTypeID() == Float4E1M2x2TyID; }
+  bool isHiFloat4x2Ty() const { return getTypeID() == HiFloat4x2TyID; }
+  bool isHiFloat8Ty() const { return getTypeID() == HiFloat8TyID; }
+  bool isFloat8E4M3Ty() const { return getTypeID() == Float8E4M3TyID; }
+  bool isFloat8E5M2Ty() const { return getTypeID() == Float8E5M2TyID; }
+  bool isFloat8E8M0Ty() const { return getTypeID() == Float8E8M0TyID; }
+
+  bool isAscendLowPrecisionFPTy() const {
+    switch (getTypeID()) {
+    case Float4E2M1x2TyID:
+    case Float4E1M2x2TyID:
+    case HiFloat4x2TyID:
+    case HiFloat8TyID:
+    case Float8E4M3TyID:
+    case Float8E5M2TyID:
+    case Float8E8M0TyID:
+      return true;
+    default:
+      return false;
+    }
+  }
+
   /// Return true if this is a 16-bit float type.
   bool is16bitFPTy() const {
     return getTypeID() == BFloatTyID || getTypeID() == HalfTyID;
@@ -182,8 +212,8 @@ public:
 
   /// Return true if this is one of the floating-point types
   bool isFloatingPointTy() const {
-    return isIEEELikeFPTy() || getTypeID() == X86_FP80TyID ||
-           getTypeID() == PPC_FP128TyID;
+    return isIEEELikeFPTy() || isAscendLowPrecisionFPTy() ||
+           getTypeID() == X86_FP80TyID || getTypeID() == PPC_FP128TyID;
   }
 
   /// Returns true if this is a floating-point type that is an unevaluated sum
@@ -440,6 +470,13 @@ public:
   LLVM_ABI static Type *getLabelTy(LLVMContext &C);
   LLVM_ABI static Type *getHalfTy(LLVMContext &C);
   LLVM_ABI static Type *getBFloatTy(LLVMContext &C);
+  LLVM_ABI static Type *getFloat4E2M1x2Ty(LLVMContext &C);
+  LLVM_ABI static Type *getFloat4E1M2x2Ty(LLVMContext &C);
+  LLVM_ABI static Type *getHiFloat4x2Ty(LLVMContext &C);
+  LLVM_ABI static Type *getHiFloat8Ty(LLVMContext &C);
+  LLVM_ABI static Type *getFloat8E4M3Ty(LLVMContext &C);
+  LLVM_ABI static Type *getFloat8E5M2Ty(LLVMContext &C);
+  LLVM_ABI static Type *getFloat8E8M0Ty(LLVMContext &C);
   LLVM_ABI static Type *getFloatTy(LLVMContext &C);
   LLVM_ABI static Type *getDoubleTy(LLVMContext &C);
   LLVM_ABI static Type *getMetadataTy(LLVMContext &C);

@@ -41,6 +41,13 @@ Type *Type::getPrimitiveType(LLVMContext &C, TypeID IDNumber) {
   case VoidTyID      : return getVoidTy(C);
   case HalfTyID      : return getHalfTy(C);
   case BFloatTyID    : return getBFloatTy(C);
+  case Float4E2M1x2TyID : return getFloat4E2M1x2Ty(C);
+  case Float4E1M2x2TyID : return getFloat4E1M2x2Ty(C);
+  case HiFloat4x2TyID   : return getHiFloat4x2Ty(C);
+  case HiFloat8TyID     : return getHiFloat8Ty(C);
+  case Float8E4M3TyID   : return getFloat8E4M3Ty(C);
+  case Float8E5M2TyID   : return getFloat8E5M2Ty(C);
+  case Float8E8M0TyID   : return getFloat8E8M0Ty(C);
   case FloatTyID     : return getFloatTy(C);
   case DoubleTyID    : return getDoubleTy(C);
   case X86_FP80TyID  : return getX86_FP80Ty(C);
@@ -197,6 +204,14 @@ bool Type::isEmptyTy() const {
 
 TypeSize Type::getPrimitiveSizeInBits() const {
   switch (getTypeID()) {
+  case Type::Float4E2M1x2TyID:
+  case Type::Float4E1M2x2TyID:
+  case Type::HiFloat4x2TyID:
+  case Type::HiFloat8TyID:
+  case Type::Float8E4M3TyID:
+  case Type::Float8E5M2TyID:
+  case Type::Float8E8M0TyID:
+    return TypeSize::getFixed(8);
   case Type::HalfTyID:
     return TypeSize::getFixed(16);
   case Type::BFloatTyID:
@@ -237,6 +252,10 @@ int Type::getFPMantissaWidth() const {
   if (auto *VTy = dyn_cast<VectorType>(this))
     return VTy->getElementType()->getFPMantissaWidth();
   assert(isFloatingPointTy() && "Not a floating point type!");
+  // These low-precision payload types are represented for LLVM IR printing
+  // and Bisheng handoff. LLVM does not model their APFloat semantics.
+  if (isAscendLowPrecisionFPTy())
+    return -1;
   if (getTypeID() == HalfTyID) return 11;
   if (getTypeID() == BFloatTyID) return 8;
   if (getTypeID() == FloatTyID) return 24;
@@ -282,6 +301,23 @@ Type *Type::getVoidTy(LLVMContext &C) { return &C.pImpl->VoidTy; }
 Type *Type::getLabelTy(LLVMContext &C) { return &C.pImpl->LabelTy; }
 Type *Type::getHalfTy(LLVMContext &C) { return &C.pImpl->HalfTy; }
 Type *Type::getBFloatTy(LLVMContext &C) { return &C.pImpl->BFloatTy; }
+Type *Type::getFloat4E2M1x2Ty(LLVMContext &C) {
+  return &C.pImpl->Float4E2M1x2Ty;
+}
+Type *Type::getFloat4E1M2x2Ty(LLVMContext &C) {
+  return &C.pImpl->Float4E1M2x2Ty;
+}
+Type *Type::getHiFloat4x2Ty(LLVMContext &C) { return &C.pImpl->HiFloat4x2Ty; }
+Type *Type::getHiFloat8Ty(LLVMContext &C) { return &C.pImpl->HiFloat8Ty; }
+Type *Type::getFloat8E4M3Ty(LLVMContext &C) {
+  return &C.pImpl->Float8E4M3Ty;
+}
+Type *Type::getFloat8E5M2Ty(LLVMContext &C) {
+  return &C.pImpl->Float8E5M2Ty;
+}
+Type *Type::getFloat8E8M0Ty(LLVMContext &C) {
+  return &C.pImpl->Float8E8M0Ty;
+}
 Type *Type::getFloatTy(LLVMContext &C) { return &C.pImpl->FloatTy; }
 Type *Type::getDoubleTy(LLVMContext &C) { return &C.pImpl->DoubleTy; }
 Type *Type::getMetadataTy(LLVMContext &C) { return &C.pImpl->MetadataTy; }

@@ -689,6 +689,14 @@ inline TypeSize DataLayout::getTypeSizeInBits(Type *Ty) const {
     return getStructLayout(cast<StructType>(Ty))->getSizeInBits();
   case Type::IntegerTyID:
     return TypeSize::getFixed(Ty->getIntegerBitWidth());
+  case Type::Float4E2M1x2TyID:
+  case Type::Float4E1M2x2TyID:
+  case Type::HiFloat4x2TyID:
+  case Type::HiFloat8TyID:
+  case Type::Float8E4M3TyID:
+  case Type::Float8E5M2TyID:
+  case Type::Float8E8M0TyID:
+    return TypeSize::getFixed(8);
   case Type::HalfTyID:
   case Type::BFloatTyID:
     return TypeSize::getFixed(16);

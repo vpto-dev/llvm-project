@@ -56,6 +56,20 @@ private:
       return Float16Type::get(&context);
     if (type->isBFloatTy())
       return BFloat16Type::get(&context);
+    if (type->isFloat4E2M1x2Ty())
+      return LLVM::LLVMFloat4E2M1x2Type::get(&context);
+    if (type->isFloat4E1M2x2Ty())
+      return LLVM::LLVMFloat4E1M2x2Type::get(&context);
+    if (type->isHiFloat4x2Ty())
+      return LLVM::LLVMHiFloat4x2Type::get(&context);
+    if (type->isHiFloat8Ty())
+      return LLVM::LLVMHiFloat8Type::get(&context);
+    if (type->isFloat8E4M3Ty())
+      return LLVM::LLVMFloat8E4M3Type::get(&context);
+    if (type->isFloat8E5M2Ty())
+      return LLVM::LLVMFloat8E5M2Type::get(&context);
+    if (type->isFloat8E8M0Ty())
+      return LLVM::LLVMFloat8E8M0Type::get(&context);
     if (type->isFloatTy())
       return Float32Type::get(&context);
     if (type->isDoubleTy())

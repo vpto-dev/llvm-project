@@ -66,6 +66,13 @@ namespace LLVM {
   }
 
 DEFINE_TRIVIAL_LLVM_TYPE(LLVMVoidType, "llvm.void");
+DEFINE_TRIVIAL_LLVM_TYPE(LLVMFloat4E2M1x2Type, "llvm.float4e2m1x2");
+DEFINE_TRIVIAL_LLVM_TYPE(LLVMFloat4E1M2x2Type, "llvm.float4e1m2x2");
+DEFINE_TRIVIAL_LLVM_TYPE(LLVMHiFloat4x2Type, "llvm.hifloat4x2");
+DEFINE_TRIVIAL_LLVM_TYPE(LLVMHiFloat8Type, "llvm.hifloat8");
+DEFINE_TRIVIAL_LLVM_TYPE(LLVMFloat8E4M3Type, "llvm.float8e4m3");
+DEFINE_TRIVIAL_LLVM_TYPE(LLVMFloat8E5M2Type, "llvm.float8e5m2");
+DEFINE_TRIVIAL_LLVM_TYPE(LLVMFloat8E8M0Type, "llvm.float8e8m0");
 DEFINE_TRIVIAL_LLVM_TYPE(LLVMTokenType, "llvm.token");
 DEFINE_TRIVIAL_LLVM_TYPE(LLVMLabelType, "llvm.label");
 DEFINE_TRIVIAL_LLVM_TYPE(LLVMMetadataType, "llvm.metadata");

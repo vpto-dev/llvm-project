@@ -1150,6 +1150,14 @@ void ModuleBitcodeWriter::writeTypeTable() {
     case Type::VoidTyID:      Code = bitc::TYPE_CODE_VOID;      break;
     case Type::HalfTyID:      Code = bitc::TYPE_CODE_HALF;      break;
     case Type::BFloatTyID:    Code = bitc::TYPE_CODE_BFLOAT;    break;
+    case Type::Float4E2M1x2TyID:
+    case Type::Float4E1M2x2TyID:
+    case Type::HiFloat4x2TyID:
+    case Type::HiFloat8TyID:
+    case Type::Float8E4M3TyID:
+    case Type::Float8E5M2TyID:
+    case Type::Float8E8M0TyID:
+      llvm_unreachable("Ascend low-precision types are unsupported in bitcode");
     case Type::FloatTyID:     Code = bitc::TYPE_CODE_FLOAT;     break;
     case Type::DoubleTyID:    Code = bitc::TYPE_CODE_DOUBLE;    break;
     case Type::X86_FP80TyID:  Code = bitc::TYPE_CODE_X86_FP80;  break;

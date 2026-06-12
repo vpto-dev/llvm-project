@@ -706,6 +706,13 @@ bool mlir::LLVM::isCompatibleOuterType(Type type) {
   if (llvm::isa<
       BFloat16Type,
       Float16Type,
+      LLVMFloat4E2M1x2Type,
+      LLVMFloat4E1M2x2Type,
+      LLVMHiFloat4x2Type,
+      LLVMHiFloat8Type,
+      LLVMFloat8E4M3Type,
+      LLVMFloat8E5M2Type,
+      LLVMFloat8E8M0Type,
       Float32Type,
       Float64Type,
       Float80Type,
@@ -772,6 +779,13 @@ static bool isCompatibleImpl(Type type, DenseSet<Type> &compatibleTypes) {
           .Case<
             BFloat16Type,
             Float16Type,
+            LLVMFloat4E2M1x2Type,
+            LLVMFloat4E1M2x2Type,
+            LLVMHiFloat4x2Type,
+            LLVMHiFloat8Type,
+            LLVMFloat8E4M3Type,
+            LLVMFloat8E5M2Type,
+            LLVMFloat8E8M0Type,
             Float32Type,
             Float64Type,
             Float80Type,
@@ -807,7 +821,10 @@ bool mlir::LLVM::isCompatibleType(Type type) {
 
 bool mlir::LLVM::isCompatibleFloatingPointType(Type type) {
   return llvm::isa<BFloat16Type, Float16Type, Float32Type, Float64Type,
-                   Float80Type, Float128Type, LLVMPPCFP128Type>(type);
+                   Float80Type, Float128Type, LLVMFloat4E2M1x2Type,
+                   LLVMFloat4E1M2x2Type, LLVMHiFloat4x2Type, LLVMHiFloat8Type,
+                   LLVMFloat8E4M3Type, LLVMFloat8E5M2Type, LLVMFloat8E8M0Type,
+                   LLVMPPCFP128Type>(type);
 }
 
 bool mlir::LLVM::isCompatibleVectorType(Type type) {
@@ -818,7 +835,10 @@ bool mlir::LLVM::isCompatibleVectorType(Type type) {
     if (auto intType = llvm::dyn_cast<IntegerType>(elementType))
       return intType.isSignless();
     return llvm::isa<BFloat16Type, Float16Type, Float32Type, Float64Type,
-                     Float80Type, Float128Type, LLVMPointerType>(elementType);
+                     Float80Type, Float128Type, LLVMFloat4E2M1x2Type,
+                     LLVMFloat4E1M2x2Type, LLVMHiFloat4x2Type, LLVMHiFloat8Type,
+                     LLVMFloat8E4M3Type, LLVMFloat8E5M2Type,
+                     LLVMFloat8E8M0Type, LLVMPointerType>(elementType);
   }
   return false;
 }
@@ -860,6 +880,10 @@ llvm::TypeSize mlir::LLVM::getPrimitiveTypeSizeInBits(Type type) {
   return llvm::TypeSwitch<Type, llvm::TypeSize>(type)
       .Case<BFloat16Type, Float16Type>(
           [](Type) { return llvm::TypeSize::getFixed(16); })
+      .Case<LLVMFloat4E2M1x2Type, LLVMFloat4E1M2x2Type, LLVMHiFloat4x2Type,
+            LLVMHiFloat8Type, LLVMFloat8E4M3Type, LLVMFloat8E5M2Type,
+            LLVMFloat8E8M0Type>(
+          [](Type) { return llvm::TypeSize::getFixed(8); })
       .Case<Float32Type>([](Type) { return llvm::TypeSize::getFixed(32); })
       .Case<Float64Type>([](Type) { return llvm::TypeSize::getFixed(64); })
       .Case<Float80Type>([](Type) { return llvm::TypeSize::getFixed(80); })
@@ -893,6 +917,13 @@ llvm::TypeSize mlir::LLVM::getPrimitiveTypeSizeInBits(Type type) {
 
 void LLVMDialect::registerTypes() {
   addTypes<
+      LLVMFloat4E2M1x2Type,
+      LLVMFloat4E1M2x2Type,
+      LLVMHiFloat4x2Type,
+      LLVMHiFloat8Type,
+      LLVMFloat8E4M3Type,
+      LLVMFloat8E5M2Type,
+      LLVMFloat8E8M0Type,
 #define GET_TYPEDEF_LIST
 #include "mlir/Dialect/LLVMIR/LLVMTypes.cpp.inc"
       >();

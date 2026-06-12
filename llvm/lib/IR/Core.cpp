@@ -589,6 +589,14 @@ LLVMTypeKind LLVMGetTypeKind(LLVMTypeRef Ty) {
     return LLVMHalfTypeKind;
   case Type::BFloatTyID:
     return LLVMBFloatTypeKind;
+  case Type::Float4E2M1x2TyID:
+  case Type::Float4E1M2x2TyID:
+  case Type::HiFloat4x2TyID:
+  case Type::HiFloat8TyID:
+  case Type::Float8E4M3TyID:
+  case Type::Float8E5M2TyID:
+  case Type::Float8E8M0TyID:
+    llvm_unreachable("Ascend low-precision types are unsupported via the C API");
   case Type::FloatTyID:
     return LLVMFloatTypeKind;
   case Type::DoubleTyID:

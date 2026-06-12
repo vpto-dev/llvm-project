@@ -43,6 +43,27 @@ public:
             .Case([this](BFloat16Type) {
               return llvm::Type::getBFloatTy(context);
             })
+            .Case([this](LLVM::LLVMFloat4E2M1x2Type) {
+              return llvm::Type::getFloat4E2M1x2Ty(context);
+            })
+            .Case([this](LLVM::LLVMFloat4E1M2x2Type) {
+              return llvm::Type::getFloat4E1M2x2Ty(context);
+            })
+            .Case([this](LLVM::LLVMHiFloat4x2Type) {
+              return llvm::Type::getHiFloat4x2Ty(context);
+            })
+            .Case([this](LLVM::LLVMHiFloat8Type) {
+              return llvm::Type::getHiFloat8Ty(context);
+            })
+            .Case([this](LLVM::LLVMFloat8E4M3Type) {
+              return llvm::Type::getFloat8E4M3Ty(context);
+            })
+            .Case([this](LLVM::LLVMFloat8E5M2Type) {
+              return llvm::Type::getFloat8E5M2Ty(context);
+            })
+            .Case([this](LLVM::LLVMFloat8E8M0Type) {
+              return llvm::Type::getFloat8E8M0Ty(context);
+            })
             .Case(
                 [this](Float32Type) { return llvm::Type::getFloatTy(context); })
             .Case([this](Float64Type) {

@@ -684,6 +684,7 @@ lltok::Kind LLLexer::LexIdentifier() {
   KEYWORD(graalcc);
   KEYWORD(riscv_vector_cc);
   KEYWORD(riscv_vls_cc);
+  KEYWORD(simt_entry);
 
   KEYWORD(cc);
   KEYWORD(c);
@@ -882,6 +883,13 @@ lltok::Kind LLLexer::LexIdentifier() {
   TYPEKEYWORD("void",      Type::getVoidTy(Context));
   TYPEKEYWORD("half",      Type::getHalfTy(Context));
   TYPEKEYWORD("bfloat",    Type::getBFloatTy(Context));
+  TYPEKEYWORD("float4e2m1x2", Type::getFloat4E2M1x2Ty(Context));
+  TYPEKEYWORD("float4e1m2x2", Type::getFloat4E1M2x2Ty(Context));
+  TYPEKEYWORD("hifloat4x2", Type::getHiFloat4x2Ty(Context));
+  TYPEKEYWORD("hifloat8", Type::getHiFloat8Ty(Context));
+  TYPEKEYWORD("float8e4m3", Type::getFloat8E4M3Ty(Context));
+  TYPEKEYWORD("float8e5m2", Type::getFloat8E5M2Ty(Context));
+  TYPEKEYWORD("float8e8m0", Type::getFloat8E8M0Ty(Context));
   TYPEKEYWORD("float",     Type::getFloatTy(Context));
   TYPEKEYWORD("double",    Type::getDoubleTy(Context));
   TYPEKEYWORD("x86_fp80",  Type::getX86_FP80Ty(Context));
