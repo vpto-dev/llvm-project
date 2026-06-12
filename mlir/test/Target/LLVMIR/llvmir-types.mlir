@@ -86,6 +86,20 @@ llvm.func @return_vs_4_i32() -> vector<[4]xi32>
 llvm.func @return_vs_8_half() -> vector<[8]xf16>
 // CHECK: declare <4 x ptr> @return_v_4_pi8()
 llvm.func @return_v_4_pi8() -> vector<4x!llvm.ptr>
+// CHECK: declare <4 x float4e2m1x2> @return_v_4_float4e2m1x2()
+llvm.func @return_v_4_float4e2m1x2() -> vector<4x!llvm.float4e2m1x2>
+// CHECK: declare <4 x float4e1m2x2> @return_v_4_float4e1m2x2()
+llvm.func @return_v_4_float4e1m2x2() -> vector<4x!llvm.float4e1m2x2>
+// CHECK: declare <4 x hifloat4x2> @return_v_4_hifloat4x2()
+llvm.func @return_v_4_hifloat4x2() -> vector<4x!llvm.hifloat4x2>
+// CHECK: declare <4 x hifloat8> @return_v_4_hifloat8()
+llvm.func @return_v_4_hifloat8() -> vector<4x!llvm.hifloat8>
+// CHECK: declare <4 x float8e4m3> @return_v_4_float8e4m3()
+llvm.func @return_v_4_float8e4m3() -> vector<4x!llvm.float8e4m3>
+// CHECK: declare <4 x float8e5m2> @return_v_4_float8e5m2()
+llvm.func @return_v_4_float8e5m2() -> vector<4x!llvm.float8e5m2>
+// CHECK: declare <4 x float8e8m0> @return_v_4_float8e8m0()
+llvm.func @return_v_4_float8e8m0() -> vector<4x!llvm.float8e8m0>
 
 //
 // Arrays.
