@@ -1611,6 +1611,22 @@ static void WriteConstantInternal(raw_ostream &Out, const Constant *CV,
   if (const ConstantInt *CI = dyn_cast<ConstantInt>(CV)) {
     Type *Ty = CI->getType();
 
+    if (auto *VTy = dyn_cast<FixedVectorType>(Ty)) {
+      Out << '<';
+      ListSeparator LS;
+      for (unsigned I = 0, E = VTy->getNumElements(); I != E; ++I) {
+        Out << LS;
+        WriterCtx.TypePrinter->print(Ty->getScalarType(), Out);
+        Out << ' ';
+        if (Ty->getScalarType()->isIntegerTy(1))
+          Out << (CI->getZExtValue() ? "true" : "false");
+        else
+          Out << CI->getValue();
+      }
+      Out << '>';
+      return;
+    }
+
     if (Ty->isVectorTy()) {
       Out << "splat (";
       WriterCtx.TypePrinter->print(Ty->getScalarType(), Out);
@@ -1630,6 +1646,19 @@ static void WriteConstantInternal(raw_ostream &Out, const Constant *CV,
 
   if (const ConstantFP *CFP = dyn_cast<ConstantFP>(CV)) {
     Type *Ty = CFP->getType();
+
+    if (auto *VTy = dyn_cast<FixedVectorType>(Ty)) {
+      Out << '<';
+      ListSeparator LS;
+      for (unsigned I = 0, E = VTy->getNumElements(); I != E; ++I) {
+        Out << LS;
+        WriterCtx.TypePrinter->print(Ty->getScalarType(), Out);
+        Out << ' ';
+        WriteAPFloatInternal(Out, CFP->getValueAPF());
+      }
+      Out << '>';
+      return;
+    }
 
     if (Ty->isVectorTy()) {
       Out << "splat (";
@@ -1765,22 +1794,6 @@ static void WriteConstantInternal(raw_ostream &Out, const Constant *CV,
     auto *CVVTy = cast<FixedVectorType>(CV->getType());
     Type *ETy = CVVTy->getElementType();
 
-    // Use the same shorthand for splat vector (i.e. "splat(Ty val)") as is
-    // permitted on IR input to reduce the output changes when enabling
-    // UseConstant{Int,FP}ForFixedLengthSplat.
-    // TODO: Remove this block when the UseConstant{Int,FP}ForFixedLengthSplat
-    // options are removed.
-    if (auto *SplatVal = CV->getSplatValue()) {
-      if (isa<ConstantInt>(SplatVal) || isa<ConstantFP>(SplatVal)) {
-        Out << "splat (";
-        WriterCtx.TypePrinter->print(ETy, Out);
-        Out << ' ';
-        WriteAsOperandInternal(Out, SplatVal, WriterCtx);
-        Out << ')';
-        return;
-      }
-    }
-
     Out << '<';
     WriterCtx.TypePrinter->print(ETy, Out);
     Out << ' ';
@@ -1821,7 +1834,8 @@ static void WriteConstantInternal(raw_ostream &Out, const Constant *CV,
     // UseConstant{Int,FP}ForScalableSplat.
     // TODO: Remove this block when the UseConstant{Int,FP}ForScalableSplat
     // options are removed.
-    if (CE->getOpcode() == Instruction::ShuffleVector) {
+    if (!isa<FixedVectorType>(CE->getType()) &&
+        CE->getOpcode() == Instruction::ShuffleVector) {
       if (auto *SplatVal = CE->getSplatValue()) {
         if (isa<ConstantInt>(SplatVal) || isa<ConstantFP>(SplatVal)) {
           Out << "splat (";
